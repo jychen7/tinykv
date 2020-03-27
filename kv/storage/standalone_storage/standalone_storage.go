@@ -61,6 +61,10 @@ func (r *StandAloneStorageReader) GetCF(cf string, key []byte) ([]byte, error) {
   // util.go
   // https://godoc.org/github.com/dgraph-io/badger#Txn.Get
   val, err := engine_util.GetCFFromTxn(r.txn, cf, key)
+  if err == badger.ErrKeyNotFound {
+    return nil, nil
+  }
+
   return val, err
 }
 
