@@ -132,6 +132,10 @@ func (l *RaftLog) unstableEntries() []pb.Entry {
 	return l.entries[unstable_index:]
 }
 
+func (l *RaftLog) increaseStabledTo(stabled uint64) {
+    l.stabled = stabled
+}
+
 // nextEnts returns all the committed but not applied entries
 func (l *RaftLog) nextEnts() (ents []pb.Entry) {
 	if len(l.entries) == 0 {
@@ -141,6 +145,10 @@ func (l *RaftLog) nextEnts() (ents []pb.Entry) {
     committed_index := l.committed - l.FirstIndex()
     // [low, high)
 	return l.entries[not_applied_index : committed_index+1]
+}
+
+func (l *RaftLog) increaseAppliedTo(applied uint64) {
+    l.applied = applied
 }
 
 func (l *RaftLog) FirstIndex() uint64 {

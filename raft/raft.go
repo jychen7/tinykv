@@ -705,6 +705,18 @@ func (r *Raft) peerNext(peer_id uint64) (n uint64) {
     return max(r.Prs[peer_id].Next, 1)
 }
 
+func (r *Raft) current_soft_hard_state() (*SoftState, pb.HardState) {
+    soft := &SoftState{
+        Lead: r.Lead,
+        RaftState: r.State,
+    }
+    hard := pb.HardState{
+        Term: r.Term,
+        Vote: r.Vote,
+        Commit: r.RaftLog.committed,
+    }
+    return soft, hard
+}
 // handleSnapshot handle Snapshot RPC request
 func (r *Raft) handleSnapshot(m pb.Message) {
 	// Your Code Here (2C).

@@ -40,6 +40,10 @@ func max(a, b uint64) uint64 {
 	return b
 }
 
+func IsEmptySoftState(st *SoftState) bool {
+	return st == nil
+}
+
 // IsEmptyHardState returns true if the given HardState is empty.
 func IsEmptyHardState(st pb.HardState) bool {
 	return isHardStateEqual(st, pb.HardState{})
@@ -126,4 +130,11 @@ func IsResponseMsg(msgt pb.MessageType) bool {
 
 func isHardStateEqual(a, b pb.HardState) bool {
 	return a.Term == b.Term && a.Vote == b.Vote && a.Commit == b.Commit
+}
+
+func isSoftStateEqual(a, b *SoftState) bool {
+	if a == nil && b != nil { return false }
+	if a != nil && b == nil { return false }
+	if a == nil && b == nil { return true }
+	return a.Lead == b.Lead && a.RaftState == b.RaftState
 }
